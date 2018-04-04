@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${name}"></title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+    <h1 th:text="${name}"></h1>
+</header>
+<article class="main">
+    <h2>Chapters</h2>
+    <div id="chapters">
+        <ol>
+            <li th:each="chapter : ${chapters}" th:text="${chapter}"></li>
+        </ol>
+    </div>
+</article>
+<aside class="aside">
+    <img class="cover" th:src="${imageUrl}" th:alt="${name}">
+</aside>
+<footer>
+    <p>Copyright 2018</p>
+</footer>
+</body>
+</html>

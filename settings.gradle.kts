@@ -1,0 +1,8 @@
+include("web-kotlin:common:model")
+include("web-kotlin:common:book-shelve")
+include("web-kotlin:common:html-common")
+include("web-kotlin:jvm:static-site-generation")
+include("web-kotlin:jvm:books-backend")
+include("web-kotlin:jvm:dynamic-server-side-generation")
+include("web-kotlin:js:dynamic-client-side-generation")
+include("classic:dynamic-server-side-generation-spring")

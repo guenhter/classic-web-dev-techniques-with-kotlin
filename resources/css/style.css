@@ -1,0 +1,47 @@
+body {
+  display: flex;
+  flex-flow: row wrap;
+  font-family: sans-serif;
+  font-weight: bold;
+  background: url('../img/grey_wash_wall.png');
+}
+
+body > * {
+  flex: 1 100%;
+  padding: 10px;
+}
+
+.header h1 {
+  border-bottom: 1px solid black;
+  margin-bottom: 5px;
+}
+
+.main {
+  flex: 3;
+  order: 2;
+  text-align: left;
+}
+
+.main h2 {
+  margin: 0;
+}
+
+.aside {
+  flex: 1;
+  order: 1;
+}
+
+.aside img {
+  width: 100%;
+  height: auto;
+}
+
+.footer {
+    order: 4;
+    position:absolute;
+    bottom:0;
+}
+
+.user-comment {
+    font-weight: normal;
+}
