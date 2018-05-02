@@ -6,7 +6,9 @@ import com.github.guenhter.webkotlin.shelve.BookShelveImpl
 import com.google.gson.Gson
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.features.CORS
 import io.ktor.features.ContentNegotiation
+import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receiveText
@@ -26,6 +28,10 @@ fun main(args: Array<String>) {
 
 fun runEmbeddedServer() {
     val server = embeddedServer(Netty, port = 8081) {
+        install(DefaultHeaders)
+        install(CORS) {
+            anyHost()
+        }
         install(ContentNegotiation) {
             gson {
                 setPrettyPrinting()

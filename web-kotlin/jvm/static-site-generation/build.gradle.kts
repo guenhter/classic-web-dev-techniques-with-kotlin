@@ -16,10 +16,13 @@ repositories {
 }
 dependencies {
     compile(kotlin("stdlib-jdk8"))
+    "expectedBy"(project(":web-kotlin:common:model"))
     "expectedBy"(project(":web-kotlin:common:html-common"))
     "expectedBy"(project(":web-kotlin:common:book-shelve"))
 
     compile("org.jetbrains.kotlinx:kotlinx-html-jvm:0.6.9")
+
+    testCompile(kotlin("test-junit"))
 }
 
 tasks.withType<KotlinCompile> {
