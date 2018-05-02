@@ -9,12 +9,16 @@ fun HTML.createHtmlForBook(
         comments: List<Comment> = emptyList(),
         generateCommentsInput: Boolean = false
 ) {
+    createHead(book)
+    createBody(book, comments, generateCommentsInput)
+}
+
+fun HTML.createHead(book: Book) {
     head {
         meta(charset = "UTF-8")
         title(content = book.title)
         styleLink(url = "css/style.css")
     }
-    createBody(book, comments, generateCommentsInput)
 }
 
 fun HTML.createBody(book: Book, comments: List<Comment>, generateCommentsInput: Boolean) {
@@ -72,13 +76,14 @@ private fun OL.createUserComment(comment: Comment) {
 
 private fun ARTICLE.createUserCommentInput() {
     form {
-        action = "/"
+        id = "commentForm"
+
         div(classes = "input-username") { +"Name" }
         input(type = InputType.text, name = "username") { }
 
         div(classes = "input-comment")  { +"Comment" }
         input(type = InputType.text, name = "usercomment") { }
 
-        input(type = InputType.submit) { +"Submit" }
+        input(type = InputType.submit) { value = "Submit" }
     }
 }

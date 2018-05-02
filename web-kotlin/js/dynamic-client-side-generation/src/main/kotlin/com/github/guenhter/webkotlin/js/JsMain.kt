@@ -5,45 +5,54 @@ import com.github.guenhter.webkotlin.model.Book
 import com.github.guenhter.webkotlin.model.Comment
 import kotlinx.html.dom.append
 import kotlinx.html.html
+import org.w3c.dom.HTMLFormElement
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.asList
+import org.w3c.dom.events.EventListener
+import org.w3c.dom.get
 import kotlin.browser.document
 import kotlin.browser.window
 
 
-// Kotlin problem with JS, that the Kotlin classes currently can't be used for deserialization
-// https://stackoverflow.com/questions/44715920/kotlin-js-json-deserialization
-external interface JsBook {
-    val title: String
-    val chapters: Array<String>
-    val imageUrl: String
-}
-external interface JsComment {
-    val author: String
-    val comment: String
-}
-
-fun JsBook.toBook(): Book = Book(title = title, chapters = chapters.toList(), imageUrl =  imageUrl)
-fun JsComment.toComment(): Comment = Comment(author = author, comment = comment)
-fun Array<JsComment>.toComments(): List<Comment> = map { it.toComment() }
-
 fun main(args: Array<String>) {
+
+    fetchAndParseJson<JsBook>("http://localhost:8081/api/book") {
+        val book = it.toBook()
+
+        fetchAndParseJson<Array<JsComment>>("http://localhost:8081/api/book/${book.title}/comments") {
+            val comments = it.toComments()
+            createHtmlContent(book, comments)
+        }
+    }
+}
+
+private inline fun <T> fetchAndParseJson(url: String, crossinline block: (T) -> Unit) {
     val smf: dynamic = js("({})")
     smf.method = "GET"
-    smf.mode   = "cors"
-    smf.cache  = "default"
+    smf.mode = "cors"
+    smf.cache = "default"
 
-    window.fetch("http://localhost:8081/api/book", smf)
-            .then { it.text().then<Unit> { bookResponseString ->
-                val book = JSON.parse<JsBook>(bookResponseString).toBook()
+    window.fetch(url, smf)
+            .then {
+                it.text().then { responseString ->
+                    val result = JSON.parse<T>(responseString)
 
-                window.fetch("http://localhost:8081/api/book/${book.title}/comments", smf)
-                        .then { it.text().then<Unit> { commentResponseString ->
-                            val comments = JSON.parse<Array<JsComment>>(commentResponseString).toComments()
-
-                            document.body?.append?.html {
-                                createBody(book, comments, true)
-                            }
-                        }.catch { error -> console.log("error: $error")}
-            } }
-            .catch { error -> console.log("error: $error")}
+                    block(result)
+                }.catch { error -> console.log("error: $error") }
             }
+}
+
+private fun createHtmlContent(book: Book, comments: List<Comment>) {
+    document.body?.append?.html {
+        createBody(book, comments, true)
+    }
+
+    val submitButton = document.querySelector("#commentForm input[type=submit]") as HTMLInputElement
+    submitButton.type = "button" // avoid, that form submits and reloads the page
+    submitButton.onclick = { _ ->
+        val userName = document.getElementsByName("username")[0] as HTMLInputElement
+        val userComment = document.getElementsByName("usercomment")[0] as HTMLInputElement
+
+        println("Submitting comment '${userComment.value}' from user '${userName.value}'")
+    }
 }
