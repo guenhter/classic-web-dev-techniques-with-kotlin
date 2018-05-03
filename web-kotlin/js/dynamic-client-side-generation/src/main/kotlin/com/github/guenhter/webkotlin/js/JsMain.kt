@@ -5,17 +5,12 @@ import com.github.guenhter.webkotlin.model.Book
 import com.github.guenhter.webkotlin.model.Comment
 import kotlinx.html.dom.append
 import kotlinx.html.html
-import org.w3c.dom.HTMLFormElement
 import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.asList
-import org.w3c.dom.events.EventListener
 import org.w3c.dom.get
 import kotlin.browser.document
 import kotlin.browser.window
 
-
 fun main(args: Array<String>) {
-
     fetchAndParseJson<JsBook>("http://localhost:8081/api/book") {
         val book = it.toBook()
 

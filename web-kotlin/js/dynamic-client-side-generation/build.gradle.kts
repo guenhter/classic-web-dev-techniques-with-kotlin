@@ -24,16 +24,7 @@ dependencies {
     "testCompile"(kotlin("test-js"))
 }
 
-//tasks.withType<Kotlin2JsCompile> {
-//    kotlinOptions.metaInfo = true
-//    kotlinOptions.outputFile = "${project.buildDir.path}/js/${project.name}.js"
-//    kotlinOptions.sourceMap = true
-//    kotlinOptions.moduleKind = "commonjs"
-//    kotlinOptions.main = "call"
-//}
-
 val mainSourceSet = the<JavaPluginConvention>().sourceSets["main"]!!
-
 
 val webPath = "web"
 val webOutputDir = "$buildDir/$webPath"
@@ -69,7 +60,8 @@ tasks {
                 into(webOutputDir)
             }
             copy {
-                from(fileTree("../../../resources"))
+                // copy css and images
+                from(file(project.rootProject.file("resources")))
                 into(webOutputDir)
             }
         }
